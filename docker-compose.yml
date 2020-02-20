@@ -1,0 +1,23 @@
+version: "3.7"
+services: 
+    db: 
+        image: nginx-website
+              environment: 
+             ports:
+                -'70:2000'
+                volumes:
+                 -.:/site
+
+                # same as
+                # docker run -p 80:4000 -v $(pwd):/site bretfisher/jekyll-serve
+                
+                # services:
+                #   jekyll:
+                #     image: bretfisher/jekyll-serve
+                #     volumes:
+                #       - .:/site
+                #     ports:
+                #       -'80:4000'
+
+
+        
