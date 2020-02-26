@@ -32,9 +32,15 @@ port: 5432
 //attempt 2 (successful)<- use in terminal <- pref
 //psql -s testdb
 //CREATE TABLE reviewphotos(id INT,review_id VARCHAR ,url VARCHAR);
-// COPY reviewphotos
-//  FROM '/Users/sterlingbecvar/Desktop/reviews_photos.csv'
+//CREATE TABLE question(id INT,product_id VARCHAR,question_body VARCHAR,asker_email VARCHAR,date_written VARCHAR ,asker_name VARCHAR,question_reported INT,question_helpful INT);
+//CREATE TABLE answer(id INT,question_id VARCHAR,answer_id VARCHAR,answerer_email VARCHAR,date_written VARCHAR ,answerer_name VARCHAR, answer_body VARCHAR ,answer_reported INT,answer_helpful INT);                                                                                                                                
+// copy answer
+//  FROM '/Users/sterlingbecvar/express/Question-Answer-Api/server/csv/Answer.csv'
+//  DELIMITER ',' CSV HEADER;
+// copy reviewphotos
+//  FROM '/Users/sterlingbecvar/express/Question-Answer-Api/server/csv/Photos.csv'
 // DELIMITER ',' CSV HEADER;
+
 //_________________________________________________________________________
 //connect to database
 const connectionString = 'postgressql://postgres:1234@localhost:5432/testdb'
@@ -45,72 +51,51 @@ client.connect()
 //__________________________________________________________________________
 //create get request for localhost on questions
 
- //app.get('/questions', (req, res) => 
-// client.query("Select *from question where product_id in ('5')").then((something)=>{return res.send(something)})
-// )
-// //create get request for localhost on answers
-// app.get('/answers', (req, res) => 
-// client.query("Select *from answer where question_id in ('5')").then((something)=>{return res.send(something)})
-// )
+ app.get('/questions', (req, res) => 
+client.query("Select *from question where product_id in ('3')").then((something)=>{return res.send(something)})
+)
+//create get request for localhost on answers
+app.get('/answers', (req, res) => 
+client.query("Select *from answer where question_id in ('3')").then((something)=>{return res.send(something)})
+)
 
 //create get request for localhost on photos
 app.get('/reviewphotos', (req, res) =>  
-client.query("Select *from reviewphotos where review_id in ('5')").then((something)=>{return res.send(something)}))
-
-
+ client.query("Select *from reviewphotos where review_id in ('3','5','6')").then((something)=>{return res.send(something)}))
 
 //use join  to join the three tables together
-constcasual = require('casual');
+app.get('/joined', (req, res) =>{
+  var array = []
+  var photos = []
+  var quest = client.query("Select *from question where product_id in ('3')").then((something)=>{
+  array.push(something.rows)
+  })
+.then(()=> client.query("Select * from answer where question_id in ('3')"))
 
-// app.get('/joined', (req, res) =>{
-//   var array = []
-//   var quest = client.query("Select *from question where product_id in ('5')").then((something)=>{
-//   array.push(something.rows)
-//   })
-// .then(()=> client.query("Select * from answer where question_id in ('5')"))
-
-//   .then((answer)=> 
-//   array[0].map((each)=> each['answers'] = answer.rows)
-//   )
-//   .then(()=> 
-//   array[0].map((each)=> each.answers.map((photo)=> photo['photos']= []))
-//   )
-//   .then(()=>  res.send(array))
-// })
-
-// array.map((each)=>{  return each['cool'] = client.query("Select * from answer where question_id in ('5')").then((every)=> every.rows)})
-//client.query("Select * from question LEFT JOIN answer ON answer.question_id = question.product_id  LEFT JOIN reviewphotos ON reviewphotos.review_id = answer.question_id where product_id in ('5')").then((something)=>{return res.send(something)}))
-// client.query("SELECT  question.product_id, question.body AS questions,question.date_written AS question_date_written, question.asker_name, question.asker_email, question.reported AS question_reported, question.helpful AS question_helpful FROM question LEFT JOIN answer ON answer.question_id = question.product_id where product_id in ('5')").then((something)=>{return res.send(something)}))
-//client.query("Select question.body,answer.body from question,answer where question_id in ('5')").then((something)=>{return res.send(something)}))
-//client.query("Select * FROM question  where product_id in ('5') UNION SELECT answer AS cool FROM answer where  question_id in ('5') ORDER BY body").then((something)=>{return res.send(something)}))
- //client.query("Select * from question LEFT ANTI JOIN  answer  ON answer.question_id = question.product_id  left outer join  reviewphotos ON reviewphotos.review_id = answer.question_id where product_id in ('5')").then((something)=>{return res.send(something)}))
-//client.query("Select * FROM question  where product_id in ('5') UNION SELECT answer AS cool FROM answer where  question_id in ('5') ORDER BY body").then((something)=>{return res.send(something)}))
-// client.query("Select * from questions LEFT JOIN answer ON answer.question_id = question.product_id  LEFT JOIN reviewphotos ON reviewphotos.review_id = answer.question_id where review_id in ('5')").then((something)=>{return res.send(something)}))
-//client.query("SELECT  question AS questions  FROM question  left outer join answer AS answer ON answer.question_id = question.product_id where product_id in ('5')").then((something)=>{return res.send(something)}))
-//client.query("SELECT question.body, answer.body FROM question JOIN answer USING (body)   where product_id in ('5')").then((something)=>{return res.send(something)})) 
-//client.query("SELECT * INTO  question from answer WHERE answer.question_id in ('5')").then((something)=>{return res.send(something)}))
-// SELECT table_name1.column_name, 
-//      table_name2.column_name
-// FROM table_name1
-// INNER JOIN table_name2 ON join_predicate;
-// client.query("SELECT c.body, d.body FROM question AS c , answer AS d  where answer.question_id = question.product_id  product_id in ('5')  GROUP BY GROUPING SETS (c.body,d.body) ").then((something)=>{return res.send(something)}))
-// client.query("SELECT t1.body,t2.body FROM  question t1 INNER JOIN answer t2 ON answer.question_id = question.product_id  where product_id in ('5')").then((something)=>{return res.send(something)}))
-//  "SELECT * FROM question where product_id in ('1')
-// INNER JOIN answer ON answer.question_id" = question.product_id;
-// client.query("SELECT  question.product_id, question.body AS question,question.date_written AS question_date_written, question.asker_name, question.asker_email, question.reported AS question_reported, question.helpful AS question_helpful FROM question INNER JOIN answer ON answer.question_id" = question.product_id where product_id in ('5')").then((something)=>{return res.send(something)}))
-// client.query("Select * from questions LEFT JOIN answer ON answer.question_id = question.product_id  LEFT JOIN reviewphotos ON reviewphotos.review_id = answer.question_id where review_id in ('5')").then((something)=>{return res.send(something)}))
-//client.query("SELECT  question.product_id, question.body AS question,question.date_written AS question_date_written, question.asker_name, question.asker_email, question.reported AS question_reported, question.helpful AS question_helpful FROM question INNER JOIN answer ON answer.question_id" = question.product_id where product_id in ('5')").then((something)=>{return res.send(something)}))
-//client.query("Select * from questions LEFT JOIN answer ON answer.question_id = question.product_id  LEFT JOIN reviewphotos ON reviewphotos.review_id = answer.question_id where review_id in ('5')").then((something)=>{return res.send(something)}))
-//SELECT(SELECT * FROM question) AS questions FROM question INNER JOIN answer ON question.product_id = answer.question_id   INNER JOIN reviewphotos ON answer.question_id = reviewphotos.review_id     where product_id in ('5')
-//"SELECT (SELECT * FROM question) AS questions, (SELECT * FROM answer ON question.product_id = answer.question_id) AS answers, (SELECT * FROM reviewphotos ON answer.question_id = reviewphotos.review_id) FROM question  where product_id in ('5')"
-//SELECT question.product_id, question.body AS question,question.date_written AS question_date_written, question.asker_name, question.asker_email, question.reported AS question_reported, question.helpful AS question_helpful   FROM question JOIN answer ON question.product_id = answer.question_id   INNER JOIN reviewphotos ON answer.question_id = reviewphotos.review_id     where product_id in ('5')").then((something)=>{return res.send(something)}))
-//client.query("SELECT * ,( SELECT question.product_id, question.body AS question,question.date_written AS question_date_written, question.asker_name, question.asker_email, question.reported AS question_reported, question.helpful AS question_helpful FROM question where product_id in ('5')) As questions   FROM answer where  answer.question_id in ('5')").then((something)=>{return res.send(something)}))
-//client.query(""SELECT question.product_id,question.body AS question_body,(CASE WHEN question.product_id=(SELECT question_id" from answer WHERE where product_id in ('5')) THEN  question_id  ELSE 'USA' END)    FROM question where product_id in ('5')").then((something)=>{return res.send(something)}))
-// client.query("SELECT question.product_id, question.body AS question,question.date_written AS question_date_written, question.asker_name, question.asker_email, question.reported AS question_reported, question.helpful AS question_helpful   FROM question JOIN answer ON question.product_id = answer.question_id   INNER JOIN reviewphotos ON answer.question_id = reviewphotos.review_id     where product_id in ('5')").then((something)=>{return res.send(something)}))
-//client.query("SELECT * ,( SELECT question.body FROM question where product_id in ('5')) As questions   FROM answer where  answer.question_id in ('5')").then((something)=>{return res.send(something)}))
-//client.query("SELECT question.product_id,question.body AS question_body,(CASE WHEN question_id=(SELECT question_id FROM answer WHERE  answer.question_id in ('5')) THEN 'cool' END)  FROM question where product_id in ('5')").then((something)=>{return res.send(something)}))
-
-
+  .then((answer)=> 
+  array[0].map((each)=> each['answers'] = answer.rows)
+  )
+  .then(()=> {
+    var arr = array[0].map((each)=> each.answers.map((each)=>each.answer_id))
+        var string = arr[0].map((each)=> `'${each}'`)
+        var splited = string.slice(0,string.length)
+        
+        return string
+   })
+   .then((string)=> client.query(`Select * from reviewphotos where review_id in (${string}) `))
+   .then((obj)=> photos.push(obj['rows']))
+  .then(()=> 
+  
+  array[0].map((each)=> each.answers.map((photo)=> {
+    var arr = []
+   var pics = photos[0].map((some)=>{if(some["review_id"]=== photo.answer_id && some !== null && some !== undefined){return arr.push(some)}
+   return
+  }) 
+      return photo['photos'] = arr
+}))
+  )
+  .then((something)=>  res.send(array))
+})
 
 //                  #################NOTES#####################
 //all

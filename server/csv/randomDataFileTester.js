@@ -1,7 +1,6 @@
 var casual = require('casual');
 var fs = require('fs');
-
-
+const faker = require('faker');
 //question
 //id: i
 //product_id: 5
@@ -12,7 +11,6 @@ var fs = require('fs');
 //report: casual.day_of_month   
 //helpful: casual.day_of_month  
 //answer:
-
 //id: i
 //question_id: 5
 //answer_id: i
@@ -22,9 +20,9 @@ var fs = require('fs');
 //answer_reported:casual.day_of_month  
 //answer_helpful:casual.day_of_month  
 //photos:
-//id:i
-//answer_id: i
-//url:casual.url 
+// id:i
+// answer_id: i
+// url:casual.url 
 var stream = fs.createWriteStream("Question.csv", {flags:'a'});
 console.log(new Date().toISOString());
 [...Array(100)].forEach( function (item,index) {
@@ -34,18 +32,15 @@ console.log(new Date().toISOString());
 stream.end();
 
 
-var stream = fs.createWriteStream("answer.csv", {flags:'a'});
+var stream = fs.createWriteStream("Answer.csv", {flags:'a'});
 console.log(new Date().toISOString());
 [...Array(100)].forEach( function (item,index) {
-    stream.write(index + `,${casual.integer(from = 0, to = 20) }` + `,${casual.integer(from = 0, to = 20)}`+ casual.populate(`,{{email}},{{date}},{{first_name}},{{word}},{{month_number}},{{month_number}}`) + "\n");
+    stream.write(index + `,${casual.integer(from = 0, to = 20) }` + `,${casual.integer(from = 0, to = 20)}`+ casual.populate(`,{{email}},{{date}},{{first_name}},{{sentence}},{{month_number}},{{month_number}}`) + "\n");
 });
 console.log(new Date().toISOString());
 stream.end();
 
-var faker = require('faker');
-
-
-var stream = fs.createWriteStream("photos.csv", {flags:'a'});
+var stream = fs.createWriteStream("Photos.csv", {flags:'a'});
 console.log(new Date().toISOString());
 [...Array(100)].forEach( function (item,index) {
     stream.write(index + `,${casual.integer(from = 0, to = 20) }`+`,${faker.image.imageUrl(400,400,"people")}` + "\n");

@@ -1,12 +1,25 @@
 version: "3.7"
 services: 
     db: 
-        image: nginx-website
-              environment: 
-             ports:
-                -'70:2000'
-                volumes:
-                 -.:/site
+        restart: always
+        image: postgres
+        environment: 
+             POSTGRES_PASSWORD: postgres 
+             POSTGRES_USER: postgres 
+             POSTGRES_PASSWORD: postgres
+             POSTGRES_DB: testdb
+             volumes:  ./Users/sterlingbecvar/Library/Application Support/Postgres/var-12/testdb     
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+         - 8080:8080
+        # web:
+        #      image:  postgresql-example-multi-stage
+        #      depends_on:  db
+        #      ports: 
+        #          - "4000:4000"
+            
 
                 # same as
                 # docker run -p 80:4000 -v $(pwd):/site bretfisher/jekyll-serve
