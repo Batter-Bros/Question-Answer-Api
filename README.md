@@ -10,7 +10,7 @@
  ```
  # Status
  ```
- - Currently working on creating a EC2 instance and moving everything over into Aws for full deployment 
+ - Currently working on creating a EC2 instance and moving everything over into AWS for full deployment 
  ```
  
  
